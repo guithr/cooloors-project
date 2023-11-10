@@ -33,6 +33,16 @@ function randomColors() {
     // Add the color to the bg .color
     div.style.backgroundColor = randomColor;
     hexText.innerText = randomColor;
+    // Check for contrast
+    checkTextContrast(randomColor, hexText);
   });
+}
+function checkTextContrast(color, text) {
+  const luminance = chroma(color).luminance();
+  if (luminance > 0.5) {
+    text.style.color = "rgb(10, 10, 10)";
+  } else {
+    text.style.color = "rgb(240, 240, 240)";
+  }
 }
 randomColors();
