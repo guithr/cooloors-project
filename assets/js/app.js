@@ -241,6 +241,8 @@ const closeLibraryBtn = document.querySelector(".close-library");
 saveBnt.addEventListener("click", openPalette);
 closeSave.addEventListener("click", closePalette);
 submitSave.addEventListener("click", savePalette);
+libraryBtn.addEventListener("click", openLibrary);
+closeLibraryBtn.addEventListener("click", closeLibrary);
 
 function openPalette(e) {
   const popup = saveContainer.children[0];
@@ -262,13 +264,36 @@ function savePalette(e) {
   });
 
   //Generate Object
-
   let paletteNr = savedPalettes.length;
   const paletteObj = { name: name, colors: colors, nr: paletteNr };
   savedPalettes.push(paletteObj);
   //Save to localStorage
   saveToLocal(paletteObj);
   saveInput.value = "";
+
+  // Generate the palette for library
+
+  const palette = document.createElement("div");
+  palette.classList.add("custom-palette");
+  const title = document.createElement("h4");
+  title.innerText = paletteObj.name;
+  const preview = document.createElement("div");
+  preview.classList.add("small-preview");
+  paletteObj.colors.forEach((smallColor) => {
+    const smallDiv = document.createElement("div");
+    smallDiv.style.backgroundColor = smallColor;
+    preview.appendChild(smallDiv);
+  });
+  const paletteBtn = document.createElement("button");
+  paletteBtn.classList.add("pick-palette-btn");
+  paletteBtn.classList.add(paletteObj.nr);
+  paletteBtn.innerText = "Select";
+
+  //Append to library
+  palette.appendChild(title);
+  palette.appendChild(preview);
+  palette.appendChild(paletteBtn);
+  libraryContainer.children[0].appendChild(palette);
 }
 
 function saveToLocal(paletteObj) {
@@ -280,5 +305,16 @@ function saveToLocal(paletteObj) {
   }
   localPalettes.push(paletteObj);
   localStorage.setItem("palettes", JSON.stringify(localPalettes));
+}
+
+function openLibrary() {
+  const popup = libraryContainer.children[0];
+  libraryContainer.classList.add("active");
+  popup.classList.add("active");
+}
+function closeLibrary() {
+  const popup = libraryContainer.children[0];
+  libraryContainer.classList.remove("active");
+  popup.classList.remove("active");
 }
 randomColors();
